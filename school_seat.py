@@ -4,7 +4,6 @@ school_seat.py    자리 배정 결과   Ver 1.1_240527
 import openpyxl
 import random
 import pandas
-from tabulate import tabulate
 
 def read_student_data(file_path):
     workbook = openpyxl.load_workbook(file_path)
