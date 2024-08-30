@@ -19,7 +19,7 @@ def excel_to_list(file_path):
 def getLatLng(address):
     try:
         url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + address
-        rest_api_key = 'f68c19c276eb6acfe2be5643f8a1b96b'
+        rest_api_key = YOUR_REST_API_KEY
         header = {'Authorization': 'KakaoAK ' + rest_api_key}
         r = requests.get(url, headers=header)
 
