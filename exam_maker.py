@@ -1,5 +1,5 @@
 """
-exam_maker.py  시험 문제 은행  Ver 1.1_250412
+exam_maker.py  시험 문제 은행  Ver 1.2_250423
 """
 import tkinter as tk
 from tkinter import messagebox, font, ttk, simpledialog
@@ -25,12 +25,13 @@ class QuizCreator:
 
         # 결과 파일이 없으면 생성
         if not os.path.exists("exam_results.csv"):
-            with open("exam_results.csv", "w", newline='', encoding="utf-8") as f:
+            with open("exam_results.csv", "w", newline='', encoding='utf-8') as f:
                 pass
 
         self.create_entry_tab()
         self.create_manage_tab()
         self.create_statistics_tab()
+
 
     def create_entry_tab(self):
         self.entry_tab = tk.Frame(self.notebook)
@@ -49,19 +50,19 @@ class QuizCreator:
             self.options_entries.append(entry)
 
         answer_frame = tk.Frame(self.entry_tab)
-        answer_frame.pack(pady=5)
+        answer_frame.pack(pady=30)
         tk.Label(answer_frame, text="정답 (예: 1 또는 1,3):").grid(row=0, column=0)
         self.correct_answer_entry = tk.Entry(answer_frame, width=15)
-        self.correct_answer_entry.grid(row=0, column=1, padx=5)
+        self.correct_answer_entry.grid(row=0, column=1, padx=10)
 
         tk.Label(answer_frame, text="난이도 (1~5):").grid(row=0, column=2)
-        self.difficulty_entry = tk.Entry(answer_frame, width=5)
-        self.difficulty_entry.grid(row=0, column=3)
+        self.difficulty_entry = tk.Entry(answer_frame, width=10)
+        self.difficulty_entry.grid(row=0, column=3, padx=10)
 
         button_frame = tk.Frame(self.entry_tab)
-        button_frame.pack(pady=10)
-        tk.Button(button_frame, text="문제 저장", width=15, command=self.save_question).grid(row=0, column=0, padx=5)
-        tk.Button(button_frame, text="입력 지우기", width=15, command=self.clear_fields).grid(row=0, column=1, padx=5)
+        button_frame.pack(pady=5)
+        tk.Button(button_frame, text="문제 저장", width=15, command=self.save_question).grid(row=0, column=0, padx=20)
+        tk.Button(button_frame, text="입력 지우기", width=15, command=self.clear_fields).grid(row=0, column=1, padx=20)
 
     def create_manage_tab(self):
         self.manage_tab = tk.Frame(self.notebook)
@@ -70,18 +71,18 @@ class QuizCreator:
         # 상단 버튼 프레임 생성
         button_frame = tk.Frame(self.manage_tab)
         button_frame.pack(pady=5)
-        tk.Button(button_frame, text="문제 목록 보기", command=self.show_question_list).grid(row=0, column=0, padx=5)
-        tk.Button(button_frame, text="문제 검색", command=self.search_question).grid(row=0, column=1, padx=5)
-        tk.Button(button_frame, text="시험 시작", command=self.request_username_before_quiz).grid(row=0, column=2, padx=5)
+        tk.Button(button_frame, text="문제 목록 보기", width=16, command=self.show_question_list).grid(row=0, column=0, padx=20)
+        tk.Button(button_frame, text="문제 검색", width=16, command=self.search_question).grid(row=0, column=1, padx=20)
+        tk.Button(button_frame, text="시험 시작", width=16, command=self.request_username_before_quiz).grid(row=0, column=2, padx=20)
 
         # 검색 프레임 생성
         self.search_frame = tk.Frame(self.manage_tab)
         self.search_frame.pack(fill="x", pady=5)
-        tk.Label(self.search_frame, text="검색어:").pack(side="left", padx=5)
+        tk.Label(self.search_frame, text="검색어:").pack(side="left", padx=10)
         self.search_entry = tk.Entry(self.search_frame, width=30)
         self.search_entry.pack(side="left", padx=5)
-        tk.Button(self.search_frame, text="검색", command=self.perform_search).pack(side="left", padx=5)
-        tk.Button(self.search_frame, text="전체 보기", command=self.show_question_list).pack(side="left", padx=5)
+        tk.Button(self.search_frame, text="검색", width=10, command=self.perform_search).pack(side="left", padx=20)
+        tk.Button(self.search_frame, text="전체 보기", width=10, command=self.show_question_list).pack(side="left", padx=100)
 
         # TreeView 영역 생성 (좌우 10px 여백 추가)
         tree_outer_frame = tk.Frame(self.manage_tab, padx=10)
@@ -111,8 +112,8 @@ class QuizCreator:
         # 하단 버튼 프레임
         action_frame = tk.Frame(self.manage_tab)
         action_frame.pack(pady=5)
-        tk.Button(action_frame, text="선택 삭제", command=self.delete_selected).pack(side="left", padx=5)
-        tk.Button(action_frame, text="선택 편집", command=self.edit_selected).pack(side="left", padx=5)
+        tk.Button(action_frame, text="선택 삭제", width=16, command=self.delete_selected).pack(side="left", padx=5)
+        tk.Button(action_frame, text="선택 편집", width=16, command=self.edit_selected).pack(side="left", padx=5)
 
         # 상태 표시줄
         self.status_var = tk.StringVar()
@@ -124,21 +125,26 @@ class QuizCreator:
         self.stats_tab = tk.Frame(self.notebook)
         self.notebook.add(self.stats_tab, text="통계")
 
-        tk.Label(self.stats_tab, text="사용자 이름 입력:").pack(pady=(20, 5))
-        self.username_entry = tk.Entry(self.stats_tab, width=25)
-        self.username_entry.pack()
+        # 입력 영역을 위한 프레임 생성
+        input_frame = tk.Frame(self.stats_tab)
+        input_frame.pack(fill="x", pady=(20, 5))
 
-        tk.Button(self.stats_tab, text="정답 통계 보기", command=self.show_statistics).pack(pady=10)
+        # 레이블, 입력란, 버튼을 한 줄에 배치
+        tk.Label(input_frame, text="사용자 이름 입력:").pack(side="left", padx=(10, 5))
+        self.username_entry = tk.Entry(input_frame, width=25)
+        self.username_entry.pack(side="left", padx=5)
+        tk.Button(input_frame, text="정답 통계 보기", command=self.show_statistics).pack(side="left", padx=10)
 
         self.stats_result_label = tk.Label(self.stats_tab, text="", font=("맑은 고딕", 12), fg="blue")
-        self.stats_result_label.pack(pady=10)
+        self.stats_result_label.pack(pady=5)
 
         # 통계 세부정보 표시용 TreeView
-        tk.Label(self.stats_tab, text="세부 결과:").pack(pady=(10, 5))
+        tk.Label(self.stats_tab, text="세부 결과:").pack(pady=(5, 2))
         stats_tree_frame = tk.Frame(self.stats_tab)
-        stats_tree_frame.pack(fill="both", expand=True, padx=10)
+        stats_tree_frame.pack(fill="both", expand=True, padx=10, pady=(0, 20))
 
-        self.stats_tree = ttk.Treeview(stats_tree_frame, columns=["문제", "선택", "정답", "결과"], show="headings")
+        self.stats_tree = ttk.Treeview(stats_tree_frame, columns=["문제", "선택", "정답", "결과"],
+                                       show="headings", height=6)  # height=6으로 설정하여 6줄만 표시
         self.stats_tree.heading("문제", text="문제")
         self.stats_tree.heading("선택", text="선택")
         self.stats_tree.heading("정답", text="정답")
@@ -177,14 +183,14 @@ class QuizCreator:
 
         # 중복 검사
         if os.path.exists("exam.csv"):
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf-8') as f:
                 if question in [row[0] for row in csv.reader(f)]:
                     messagebox.showerror("중복", "이미 존재하는 문제입니다.")
                     return
 
         # CSV 파일에 저장
         try:
-            with open("exam.csv", "a", newline='', encoding="utf-8") as f:
+            with open("exam.csv", "a", newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 writer.writerow([question] + answers + [correct, difficulty])
             self.update_excel_file()
@@ -200,7 +206,7 @@ class QuizCreator:
     def update_excel_file(self):
         try:
             if os.path.exists("exam.csv"):
-                df = pd.read_csv("exam.csv", header=None)
+                df = pd.read_csv("exam.csv", header=None, encoding='utf-8')
                 df.columns = ['Question', '1', '2', '3', '4', '5', 'Answer', 'Difficulty']
                 df.to_excel("exam.xlsx", index=False)
         except Exception as e:
@@ -224,7 +230,7 @@ class QuizCreator:
 
         try:
             # 문제 데이터 로드
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf-8') as f:
                 data = list(csv.reader(f))
 
             # TreeView에 데이터 추가
@@ -249,7 +255,7 @@ class QuizCreator:
 
         try:
             # 데이터 로드
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf-8') as f:
                 data = list(csv.reader(f))
 
             # 선택한 항목 삭제
@@ -257,7 +263,7 @@ class QuizCreator:
             del data[index]
 
             # CSV 파일 업데이트
-            with open("exam.csv", "w", newline='', encoding="utf-8") as f:
+            with open("exam.csv", "w", newline='', encoding='utf-8') as f:
                 writer = csv.writer(f)
                 writer.writerows(data)
 
@@ -302,12 +308,12 @@ class QuizCreator:
             self.difficulty_entry.insert(0, values[7])
 
             # 원본 데이터에서 해당 문제 삭제
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf-8') as f:
                 data = list(csv.reader(f))
 
             del data[self.questions_tree.index(selected[0])]
 
-            with open("exam.csv", "w", newline='', encoding="utf-8") as f:
+            with open("exam.csv", "w", newline='', encoding='utf-8') as f:
                 csv.writer(f).writerows(data)
 
             self.update_excel_file()
@@ -342,7 +348,7 @@ class QuizCreator:
 
         try:
             # 데이터 로드
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf-8') as f:
                 data = list(csv.reader(f))
 
             # 검색 결과 필터링 (문제와 보기 옵션 모두 검색)
@@ -378,7 +384,7 @@ class QuizCreator:
 
     def start_full_quiz(self):
         try:
-            with open("exam.csv", encoding="utf-8") as f:
+            with open("exam.csv", encoding='utf=8') as f:
                 self.quiz_questions = list(csv.reader(f))
 
             if not self.quiz_questions:
@@ -451,8 +457,8 @@ class QuizCreator:
                     if is_correct:
                         self.quiz_score += 1
 
-                    # 결과 저장
-                    with open("exam_results.csv", "a", newline='', encoding="utf-8") as f:
+                    # 결과 저장 (인코딩 적용)
+                    with open("exam_results.csv", "a", newline='', encoding='utf-8') as f:
                         writer = csv.writer(f)
                         writer.writerow([self.username, q[0], ",".join(selected), ",".join(correct), result])
 
@@ -494,12 +500,44 @@ class QuizCreator:
             # 트리뷰 초기화
             self.stats_tree.delete(*self.stats_tree.get_children())
 
-            df = pd.read_csv("exam_results.csv", header=None, names=["사용자", "문제", "선택", "정답", "결과"])
-            user_df = df[df["사용자"] == name]
+            # 감지된 인코딩 사용
+            try:
+                df = pd.read_csv("exam_results.csv", header=None,
+                                 names=["사용자", "문제", "선택", "정답", "결과"],
+                                 encoding='utf-8')
 
-            if user_df.empty:
-                self.stats_result_label.config(text=f"{name}님의 기록이 없습니다.")
-                return
+                user_df = df[df["사용자"] == name]
+
+                if user_df.empty:
+                    self.stats_result_label.config(text=f"{name}님의 기록이 없습니다.")
+                    return
+
+            except Exception as e:
+                # 기본 인코딩으로 실패하면 다른 인코딩 자동 시도
+                for enc in ['utf-8', 'cp949', 'euc-kr']:
+                    if enc == self.file_encoding:
+                        continue
+                    try:
+                        df = pd.read_csv("exam_results.csv", header=None,
+                                         names=["사용자", "문제", "선택", "정답", "결과"],
+                                         encoding='utf-8')
+                        # 성공하면 인코딩 업데이트
+                        self.file_encoding = enc
+                        print(f"인코딩 업데이트: {enc}")
+
+                        user_df = df[df["사용자"] == name]
+
+                        if user_df.empty:
+                            self.stats_result_label.config(text=f"{name}님의 기록이 없습니다.")
+                            return
+
+                        # 여기서 나머지 코드 계속 진행
+                        break
+                    except:
+                        continue
+                else:
+                    # 모든 인코딩 시도 실패
+                    raise Exception("지원되는 인코딩으로 파일을 읽을 수 없습니다.")
 
             total = len(user_df)
             correct = len(user_df[user_df["결과"] == "정답"])
