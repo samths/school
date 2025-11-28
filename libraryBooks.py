@@ -249,7 +249,7 @@ clear.place(x=50, y=435)
 # Right Top Frame
 Button(RT_frame, text='도서 자료 삭제', font=btn_font, bg=btn_hlb_bg, width=17, command=remove_record).place(x=8, y=30)
 Button(RT_frame, text='모든 제고 삭제', font=btn_font, bg=btn_hlb_bg, width=17, command=delete_inventory).place(x=178, y=30)
-Button(RT_frame, text='다료 수정', font=btn_font, bg=btn_hlb_bg, width=17,
+Button(RT_frame, text='자료 수정', font=btn_font, bg=btn_hlb_bg, width=17,
        command=update_record).place(x=348, y=30)
 Button(RT_frame, text='책상태 변경', font=btn_font, bg=btn_hlb_bg, width=19,
        command=change_availability).place(x=518, y=30)
@@ -286,3 +286,4 @@ clear_and_display()
 # Finalizing the window
 root.update()
 root.mainloop()
+
